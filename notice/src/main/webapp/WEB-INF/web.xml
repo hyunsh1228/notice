@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee https://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+
+	<!-- The definition of the Root Spring Container shared by all Servlets and Filters -->
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>/WEB-INF/spring/root-context.xml</param-value>
+	</context-param>
+	
+	<!-- Creates the Spring Container shared by all Servlets and Filters -->
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+
+	<!-- appServlet 이라는 이름의 서블릿(DispatcherServlet) 정의하기 -->
+	<servlet>
+		<servlet-name>appServlet</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class> <!-- 우리가 작성한 것이 아니므로 @해서 맵핑할 수 없다. -->
+		<init-param>																	 <!-- action은 servlet-context.xml에서 정의한다. -->
+			<param-name>contextConfigLocation</param-name>
+			<param-value>/WEB-INF/spring/appServlet/servlet-context.xml</param-value>	 <!-- DispatcherServlet 의 동작을 정의하는 것 -->
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<!--  appServlet 이라는 이름의 서블릿 맵핑(어떤 형태의 요청을 처리 할지 -> @WebServlet("/*")하기 -->
+	<servlet-mapping>
+		<servlet-name>appServlet</servlet-name> <!-- 위에서 appServlet 을 정의하고 여기서 mapping 한 것 -->
+		<url-pattern>*.do</url-pattern> <!-- .do로 끝나는 모든 요청을 DispatcherServlet 이 처리한다. (mapping 은 본인이 해야한다.)-->
+	</servlet-mapping>
+	<!-- 
+		  위의 내용을 코드로 작성하면
+		 @WebServlet("*.do")
+		 public class DispatcherServlet extends HttpServlet{
+		 
+	 }
+ 	-->
+ 	
+	<!-- 최상위 경로 요청이 왔을때 home.do 요청이 자동으로 되도록 설정 (포워드 이동)-->
+	<welcome-file-list>
+		<welcome-file>home.do</welcome-file>
+	</welcome-file-list>
+	<!-- 스프링이 제공하는 인코딩 필터 -->
+	<!-- post 방식 전송될때  한글 깨지지 않도록 Spring 인코딩 필터 정의하기  -->
+	<filter>
+		<filter-name>EncodingFilter</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>utf-8</param-value>
+		</init-param>
+	</filter>
+	<!-- Spring 인코딩 필터 맵핑하기 -->
+	<filter-mapping>
+		<filter-name>EncodingFilter</filter-name>
+		<url-pattern>/*</url-pattern> <!-- 모든 요소에 대해서 인코딩하겠다~ -->
+	</filter-mapping>
+	<!-- 
+		위의 내용을 코드로 작성하면
+		@WebFilter("/*)
+		class CharacterEncodingFilter implement Filter{
+		
+		}
+	 -->
+	 
+	 <!-- 
+	 		404, 500 에러 페이지 
+	 		servlet-context.xml 에서 요청처리를 하게 할 수 있다.
+	 -->	
+	 <error-page>
+	 	<error-code>404</error-code>
+	 	<location>/error/404.do</location>
+	 </error-page>
+	 
+	 <error-page>
+	 	<error-code>500</error-code>
+	 	<location>/error/500.do</location>
+	 </error-page>
+</web-app>
