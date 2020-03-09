@@ -7,6 +7,8 @@ CREATE TABLE board_notice(
 	regdate DATE
 );
 
+CREATE SEQUENCE board_notice_seq;
+
 -- 특정 페이지 가져오는 방법  --
 SELECT *								--3. page select한다.
 FROM
@@ -24,3 +26,24 @@ PWD VARCHAR2(100) NOT NULL,
 EMAIL VARCHAR2(50),
 REGDATE DATE
 );
+
+CREATE TABLE board_qna(
+	num NUMBER PRIMARY KEY,
+	writer VARCHAR2(100) NOT NULL, -- 글 작성자의 id 
+	title VARCHAR2(100) NOT NULL,
+	content CLOB,
+	viewCount NUMBER, -- 조회수
+	regdate DATE
+);
+
+CREATE SEQUENCE board_qna_seq;
+
+CREATE TABLE board_qna_comment(
+	num NUMBER PRIMARY KEY, -- 댓글의 글번호
+	writer VARCHAR2(100), -- 댓글 작성자
+	content VARCHAR2(500), -- 댓글 내용
+	target_id VARCHAR2(100), -- 댓글의대상이되는아이디(글작성자)
+	regdate DATE -- 댓글 등록일 
+);
+
+CREATE SEQUENCE board_qna_comment_seq;

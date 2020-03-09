@@ -103,26 +103,7 @@ public class NoticeServiceImpl implements NoticeService{
 		request.setAttribute("ipAddress", ipAddress);
 	}
 
-	@Override
-	public void insert(HttpServletRequest request) {
-		//1. 폼 전송되는 파라미터 읽어오기 (글제목, 내용)
-		String title=request.getParameter("title");
-		String content=request.getParameter("content");
-		//글 작성자
-		String writer=(String)request.getSession().getAttribute("id");//로그인을 해야지만 글을 쓸수 있으므로 세션에서 얻어온다 
-		//CafeDto 객체의 작성자, 제목, 내용을 담고
-		NoticeDto dto=new NoticeDto();
-		dto.setWriter(writer);
-		dto.setTitle(title);
-		dto.setContent(content);
-		//2. DB에 글 정보 저장하고
-		noticeDao.insert(dto);
-//		if(isSuccess!=0) {
-//			request.setAttribute("isSuccess", true);
-//		}else {
-//			request.setAttribute("isSuccess", false);
-//		}
-	}
+	
 
 	@Override
 	public void delete(HttpServletRequest request, HttpServletResponse response) {
@@ -252,6 +233,13 @@ public class NoticeServiceImpl implements NoticeService{
 		NoticeDto dto2=noticeDao.getData(dto);
 		//request 에 글정보를 담고 
 		request.setAttribute("dto", dto2);
+	}
+
+
+
+	@Override
+	public void saveContent(NoticeDto dto) {
+		noticeDao.insert(dto);
 	}
 
 }

@@ -5,11 +5,7 @@
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:aop="http://www.springframework.org/schema/aop"
 	xmlns:tx="http://www.springframework.org/schema/tx"
-	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
-	xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
-	xsi:schemaLocation="http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-4.0.xsd
-		http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd
-		http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring-1.2.xsd
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd
 		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd
 		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
@@ -40,7 +36,7 @@
 		<beans:property name="dataSource" ref="dataSource"/>
 		<!-- Mapper 를 준비하는 xml 이다. 경로에 주의해서 정확히 써주어야 한다! -->
 		<beans:property name="configLocation"
-	value="classpath:com/test/notice/mybatis/Configuration.xml"/><!-- 직접 작성한 숫자나 문자를 전달할 때는 value 에 작성한다.(Configuration.xml 로딩) -->
+	value="classpath:com/noitce/notice/mybatis/Configuration.xml"/><!-- 직접 작성한 숫자나 문자를 전달할 때는 value 에 작성한다.(Configuration.xml 로딩) -->
 	</beans:bean>
 	
 	<beans:bean class="org.mybatis.spring.SqlSessionTemplate">
@@ -63,7 +59,6 @@
 		DAO 는 SqlSessionTemplate 에 의존한다.
 		하지만 SqlSssion(interface) type으로 의존하는게 유리하다.
 		class  SqlSessionTemplate  implements  SqlSession{
-
 		}
 	 -->
 	 
@@ -96,7 +91,7 @@
 	<!-- com.gura.spring05 패키지를 컴포넌트 스캔을 해서 bean 으로 만들어야
 		  되는 객체들은 bean 으로 만들어서 관리한다. 
 		 (bean이 있어야 어노테이션이 작동한다.) -->
-	<context:component-scan base-package="com.test.notice" />
+	<context:component-scan base-package="com.notice.notice" />
 	
 	<!-- 어노테이션 기반으로 aop 적용할 수 있도록 설정 -->
 	<aop:aspectj-autoproxy></aop:aspectj-autoproxy>

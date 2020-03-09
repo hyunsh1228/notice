@@ -27,7 +27,7 @@
 	<insert id="insert" parameterType="noticeDto">
 		INSERT INTO board_notice
 		(num,writer,title,content,viewCount,regdate)
-		VALUES(#{writer},#{title},#{content},#{viewCount},sysdate)
+		VALUES(board_notice_seq.NEXTVAL,#{writer},#{title},#{content},#{viewCount},sysdate)
 	</insert>
 	<!-- 글 전체의 갯수를 리턴하는 메소드 -->
 	<select id="getCount" resultType="int">
