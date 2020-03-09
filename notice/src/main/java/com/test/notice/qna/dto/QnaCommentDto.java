@@ -5,7 +5,7 @@ public class QnaCommentDto {
 	private String writer;
 	private String content; //댓글 내용
 	private String target_id; //댓글 대상자의 아이디
-	private String regdate;
+	private String regdate; 
 	
 	public QnaCommentDto() {}
 

@@ -22,6 +22,7 @@ public class QnaServiceImpl implements QnaService{
 	private QnaDao qnaDao;
 	@Autowired
 	private QnaCommentDao qnaCommentDao;
+	
 	//한 페이지에 나타낼 row 의 갯수 
 	static final int PAGE_ROW_COUNT=5;
 	//하단 디스플레이 페이지 갯수 
@@ -147,9 +148,7 @@ public class QnaServiceImpl implements QnaService{
 		QnaDto dto2=qnaDao.getData(dto);
 		//request 에 글정보를 담고 
 		request.setAttribute("dto", dto2);
-		//댓글 목록을 얻어와서 request 에 담아준다.
-		List<QnaCommentDto> commentList=qnaCommentDao.getList(num);
-		request.setAttribute("commentList", commentList);
+		
 	}
 
 	@Override
@@ -180,16 +179,10 @@ public class QnaServiceImpl implements QnaService{
 		//댓글 작성자
 		String writer=(String)request.getSession()
 				.getAttribute("id");
-		//댓글의 그룹번호
-		int ref_group=
-			Integer.parseInt(request.getParameter("ref_group"));
 		//댓글의 대상자 아이디
 		String target_id=request.getParameter("target_id");
 		//댓글의 내용
 		String content=request.getParameter("content");
-		//댓글 내에서의 그룹번호 (null 이면 원글의 댓글이다)
-		String comment_group=
-				request.getParameter("comment_group");		
 		//저장할 댓글의 primary key 값이 필요하다
 		int seq = qnaCommentDao.getSequence();
 		//댓글 정보를 Dto 에 담기
@@ -199,19 +192,9 @@ public class QnaServiceImpl implements QnaService{
 		dto.setTarget_id(target_id);
 		dto.setContent(content);
 		//댓글 정보를 DB 에 저장한다.
-		qnaCommentDao.insert(dto);	
-		
+		qnaCommentDao.insert(dto);
 	}
 
-	@Override
-	public void deleteComment(int num) {
-		qnaCommentDao.delete(num);
-	}
-
-	@Override
-	public void updateComment(QnaCommentDto dto) {
-		qnaCommentDao.update(dto);
-		
-	}
+	
 
 }

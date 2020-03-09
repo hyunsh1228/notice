@@ -7,9 +7,8 @@
 	<!-- 자주 사용하는 type의 별칭 지정하기 -->
 	<typeAliases>
 		 <typeAlias type="com.test.notice.notice.dto.NoticeDto" alias="noticeDto"/>
-		 <typeAlias type="com.test.notice.qna.dto.QnaDto" alias="qnaDto"/>		 
-		 <typeAlias type="com.test.notice.qna.dto.QnaCommentDto" alias="qnaCommentDto"/>		 
-		 <typeAlias type="com.test.notice.review.dto.ReviewDto" alias="reivewDto"/>
+		 <typeAlias type="com.test.notice.qna.dto.QnaDto" alias="qnaDto"/>		 		 
+		 <typeAlias type="com.test.notice.qna.dto.QnaCommentDto" alias="qnaCommentDto"/>		 		 
 		 <typeAlias type="com.test.notice.user.dto.UserDto" alias="userDto"/>
 	</typeAliases>
 	
@@ -18,7 +17,6 @@
 		<mapper resource="com/test/notice/mybatis/NoticeMapper.xml"/>
 		<mapper resource="com/test/notice/mybatis/QnaMapper.xml"/>
 		<mapper resource="com/test/notice/mybatis/QnaCommentMapper.xml"/>
-		<mapper resource="com/test/notice/mybatis/ReviewMapper.xml"/>
 		<mapper resource="com/test/notice/mybatis/UserMapper.xml"/>
 	</mappers>
 </configuration>

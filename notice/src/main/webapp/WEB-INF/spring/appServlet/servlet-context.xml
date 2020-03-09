@@ -10,72 +10,58 @@
 		http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd
 		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
-	<!-- Server 가 시작되는 시점에 로딩된다. ( DispatcherSerlvet 의 동작을 설정할 수 있다.) -->
-	<!-- Spring bean container 에 어떤 객체를 넣어서 관리 할지 목록이 여기에 작성되어있다. -->
 	<!-- 
-		아래의 MyBatis 관련 설정은 Servers/context.xml 문서에
+		아래의 MyBatis 관련 설정은 Servers/context.xml 문서에 
 		
-    	<Resource name="jdbc/myoracle" auth="Container"
-	        type="javax.sql.DataSource" driverClassName="oracle.jdbc.OracleDriver"
-	        url="jdbc:oracle:thin:@127.0.0.1:1521:xe"
-	        username="scott" password="tiger" maxTotal="20" maxIdle="10"
-	        maxWaitMillis="-1"/>
-	        
-		위와 같은 DB 접속 정보가 있어야지 동작한다.    
-	 -->	
-	<!-- DB 연동 설정-->	
+		<Resource name="jdbc/myoracle" auth="Container"
+           type="javax.sql.DataSource" 
+           driverClassName="oracle.jdbc.OracleDriver"
+           url="jdbc:oracle:thin:@127.0.0.1:1521:xe"
+           username="scott" password="tiger" 
+           maxTotal="20" maxIdle="10"
+           maxWaitMillis="-1"/>
+           
+               위와 같은 DB 접속 정보가 있어야지 동작한다. 
+	 -->
 	<beans:bean id="dataSource" 
-		class="org.springframework.jndi.JndiObjectFactoryBean"> <!-- JndiObjectFactoryBean type -->
-		<beans:property name="jndiName" value="java:comp/env/jdbc/myoracle"/> <!-- connection pool 에서 가져오는 것 -->
+		class="org.springframework.jndi.JndiObjectFactoryBean">
+		<beans:property name="jndiName" value="java:comp/env/jdbc/myoracle"/>
 	</beans:bean>
 	
 	<beans:bean id="sessionFactory" 
 		class="org.mybatis.spring.SqlSessionFactoryBean">
-		<!-- name="dataSource" 은 SetDataSource 메소드, ref 는 이미 만들어진 참조값을 전달 할 때 사용한다.
-			 즉, ref 속성의 속성값에서 필요한 setter method 는 name 속성의 속성값에 작성한다.-->
 		<beans:property name="dataSource" ref="dataSource"/>
-		<!-- Mapper 를 준비하는 xml 이다. 경로에 주의해서 정확히 써주어야 한다! -->
 		<beans:property name="configLocation"
-	value="classpath:com/noitce/notice/mybatis/Configuration.xml"/><!-- 직접 작성한 숫자나 문자를 전달할 때는 value 에 작성한다.(Configuration.xml 로딩) -->
+	value="classpath:com/test/notice/mybatis/Configuration.xml"/>
 	</beans:bean>
 	
 	<beans:bean class="org.mybatis.spring.SqlSessionTemplate">
-		<beans:constructor-arg name="sqlSessionFactory"
-			ref="sessionFactory"/> <!-- constructor-arg 생성자의 인자 -->
+		<beans:constructor-arg name="sqlSessionFactory" 
+			ref="sessionFactory"/>
 	</beans:bean>
-	
 	<!-- 
 		위의 설정을 java code 로 환산하면
+		
 		dataSource=new JndiObjectFactoryBean();
 		dataSource.setJndiName("java:comp/env/jdbc/myoracle");
 		
 		sessionFactory=new SqlSessionFactoryBean();
 		sessionFactory.setDataSource(dataSource);
 		sessionFactory.setConfigLocation("classpath:com/gura/spring05/mybatis/Configuration.xml");
-		
-		new SqlSessionTemplate(sessionFactory); (최종적으로 만들어진 객체는 SqlSessionTemplate 이고)
-		class SqlSessionTemplate implements SqlSession{} (SqlSession 을 구현한 것)
-		
-		DAO 는 SqlSessionTemplate 에 의존한다.
-		하지만 SqlSssion(interface) type으로 의존하는게 유리하다.
-		class  SqlSessionTemplate  implements  SqlSession{
-		}
-	 -->
 	 
+	 	new SqlSessionTemplate(sessionFactory);
+	 -->
+
 	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
 	
 	<!-- Transaction Manager 설정 -->
 	<beans:bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<beans:property name="dataSource" ref="dataSource"/>
 	</beans:bean>
-	<!-- 위의 설정을 java code 로 환산하면
-		 txManager=new DataSourceTransactionManager();
-		 txManager.setDataSource(dataSource);
-	 -->
-	 
-	 <!-- 어노테이션으로 트렌젝션 설정이 가능하도록 -->
-	 <tx:annotation-driven transaction-manager="txManager"/>
-	 
+	
+	<!-- 어노테이션으로 트렌젝션 설정이 가능하도록 -->
+	<tx:annotation-driven transaction-manager="txManager"/>
+	
 	<!-- Enables the Spring MVC @Controller programming model -->
 	<annotation-driven />
 
@@ -88,31 +74,23 @@
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
 	
-	<!-- com.gura.spring05 패키지를 컴포넌트 스캔을 해서 bean 으로 만들어야
-		  되는 객체들은 bean 으로 만들어서 관리한다. 
-		 (bean이 있어야 어노테이션이 작동한다.) -->
-	<context:component-scan base-package="com.notice.notice" />
+	<context:component-scan base-package="com.test.notice" />
 	
-	<!-- 어노테이션 기반으로 aop 적용할 수 있도록 설정 -->
+	<!-- 어노테이션 기반으로 aop 적용할수 있도록 설정 -->
 	<aop:aspectj-autoproxy></aop:aspectj-autoproxy>
 	
 	<!-- 파일 업로드 폼 전송 처리를 위한 bean 설정 -->
-	<beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-		<beans:property name="maxUploadSize" value="10240000"/> <!-- 최대 업로드 크기 대략 10MB(곱하기 안됨) -->
+	<beans:bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<beans:property name="maxUploadSize" value="10240000"/>
 	</beans:bean>
 	
-	<!-- bean 의 이름으로 view 를 찾아 갈 수 있도록 설정 -->
+	<!-- bean 의 이름으로 view 를 찾아 갈수 있도록 설정 -->
 	<beans:bean class="org.springframework.web.servlet.view.BeanNameViewResolver">
-		<!-- 0 순위로 찾아가도록 하고 없으면 자동으로 views 폴더 안에서 jsp 페이지를 찾는다. -->
+		<!-- 0순위로 찾아가도록 하고 없으면 자동으로 views 폴더안에서 jsp 페이지를 찾는다 -->
 		<beans:property name="order" value="0"/>
-	</beans:bean>	
-	<!-- 	위의 설정을 코드로 환산하면
-			a = new BeanNameViewResolver()
-			a.setOrder(0)
-	 -->
-	 
-	 <!-- web.xml 에서 설정된 error 관련된 요청 처리 -->
-	 <view-controller path="/error/404.do" view-name="error/404"/> <!-- path="/error/404.do" 요청이 왔을 때 /WEB-INF/views/error/404.jsp 로 포워드이동해서 응답하겠다.-->
-	 <view-controller path="/error/500.do" view-name="error/500"/> <!-- /WEB-INF/views/error/500.jsp 로 포워드이동해서 응답하겠다. -->
+	</beans:bean>
+	<!-- web.xml 에서 설정된 error 관련된 요청 처리 -->
+	<view-controller path="/error/404.do" view-name="error/404"/>
+	<view-controller path="/error/500.do" view-name="error/500"/>
 </beans:beans>
-<!-- 서버가 시작되면 여기있는 내용을 읽고 준비를 한다. Spring04나 Spring01의 init.xml 과 비슷하다고 생각 하면 된다. -->
