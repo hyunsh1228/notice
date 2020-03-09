@@ -16,7 +16,7 @@
 	<jsp:param value="qna" name="category"/>
 </jsp:include>
 <div class="container">
-	<h1>자유게시판</h1>
+	<h1>QnA</h1>
 		<c:if test="{not empty keyword }">
 			<p class="breadcrumb">
 				<strong>${keyword }</strong> 라는 키워드로

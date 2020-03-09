@@ -14,7 +14,7 @@
 <div class="container">
 	<h1>공지사항</h1>
 	<ul>
-		<li><a href="member/list.do">회원 목록 보기(member 테이블)</a></li>
+		<li><a href="qna/list.do">공지사항 보기</a></li>
 	</ul>
 </div>
 </body>

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import com.test.notice.qna.dto.QnaDto;
 
 @Repository
-public class QnaDaoImpl {
+public class QnaDaoImpl implements QnaDao{
 	@Autowired
 	private SqlSession session;
 	
