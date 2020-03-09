@@ -17,11 +17,11 @@
 </head>
 <body>
 <jsp:include page="../include/navbar.jsp">
-	<jsp:param value="qna" name="category"/>
+	<jsp:param value="notice" name="category"/>
 </jsp:include>
 <div class="container">
 	<ol class="breadcrumb">
-		<li><a href="${pageContext.request.contextPath }/qna/list.do">목록</a></li>
+		<li><a href="${pageContext.request.contextPath }/notice/list.do">목록</a></li>
 		<li>새글 작성</li>
 	</ol>
 	<form action="insert.do" method="post">

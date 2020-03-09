@@ -5,22 +5,23 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>/cafe/insert.jsp</title>
-<jsp:include page="../include/resource.jsp"/>
+<title>/users/private/delete.jsp</title>
+<jsp:include page="../include/resource.jsp"></jsp:include>
 </head>
 <body>
-<div class="container">{
+<div class="container">
 	<c:choose>
 		<c:when test="${isSuccess }">
 			<script>
-				alert("저장 하였습니다.");
-				location.href="${pageContext.request.contextPath }/qna/list.do";
+				alert("${num} 번 글을 삭제 했습니다.")
+				location.href="${pageContext.request.contextPath }/notice/list.do"
 			</script>
 		</c:when>
 		<c:otherwise>
+			<h1>Alert</h1>
 			<p class="alert alert-danger">
-				글 정보 저장 실패!
-				<a class="alert-danger" href="insertform.do">다시 작성 하기</a>
+				글 삭제 실패!
+				<a class="alert-link" href="../detail.do?num=${num }">돌아 가기</a>
 			</p>
 		</c:otherwise>
 	</c:choose>

@@ -13,10 +13,10 @@
 <body>
 <%-- jsp:param => 파라미터로 카테고리 전달하는 것 (active 시키기 위해) include 내부에 주석 X--%>
 <jsp:include page="../include/navbar.jsp">
-	<jsp:param value="qna" name="category"/>
+	<jsp:param value="notice" name="category"/>
 </jsp:include>
 <div class="container">
-	<h1>QnA</h1>
+	<h1>Notice</h1>
 		<c:if test="{not empty keyword }">
 			<p class="breadcrumb">
 				<strong>${keyword }</strong> 라는 키워드로

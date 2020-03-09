@@ -67,11 +67,11 @@
 <body>
 <%-- jsp:param => 파라미터로 카테고리 전달하는 것 (active 시키기 위해) include 내부에 주석 X--%>
 <jsp:include page="../include/navbar.jsp">
-	<jsp:param value="qna" name="category"/>
+	<jsp:param value="notice" name="category"/>
 </jsp:include>
 <div class="container">
 	<ol class="breadcrumb">
-		<li><a href="${pageContext.request.contextPath }/qna/list.do">목록</a></li>
+		<li><a href="${pageContext.request.contextPath }/notice/list.do">목록</a></li>
 		<li>글 상세 보기</li>
 	</ol>
 	<c:if test="${not empty keyword }">
@@ -276,7 +276,7 @@
 		var isLogin=${not empty id};
 		if(isLogin==false){
 			alert("로그인 페이지로 이동 합니다.");
-			location.href="${pageContext.request.contextPath}/users/loginform.do?url=${pageContext.request.contextPath}/qna/detail.do?num=${dto.num}";
+			location.href="${pageContext.request.contextPath}/users/loginform.do?url=${pageContext.request.contextPath}/notice/detail.do?num=${dto.num}";
 			return false;//폼 전송 막기 (jquery 에서 return false; 는 기본 동작(event)을 막아주는 역활을 한다.)
 		}
 	});
@@ -287,7 +287,7 @@
 		if(isLogin==false){
 			var isMove=confirm("로그인 페이지로 이동 하시겠습니까?");
 			if(isMove){
-				location.href="${pageContext.request.contextPath}/users/loginform.do?url=${pageContext.request.contextPath}/qna/detail.do?num=${dto.num}";
+				location.href="${pageContext.request.contextPath}/users/loginform.do?url=${pageContext.request.contextPath}/notice/detail.do?num=${dto.num}";
 			}
 		}
 	});

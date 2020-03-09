@@ -1,9 +1,9 @@
-package com.test.notice.qna.service;
+package com.test.notice.notice.service;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public interface QnaService {
+public interface NoticeService {
 	public void getList(HttpServletRequest request);
 	public void insert(HttpServletRequest request);
 	public void delete(HttpServletRequest request, HttpServletResponse response);

@@ -1,6 +1,6 @@
-package com.test.notice.qna.dto;
+package com.test.notice.notice.dto;
 
-public class QnaDto {
+public class NoticeDto {
 	private int num;
 	private String writer;
 	private String title;
@@ -12,9 +12,9 @@ public class QnaDto {
 	private int prevNum; //이전글의 글번호를 담을 필드
 	private int nextNum; //다음글의 글번호를 담을 필드
 	
-	public QnaDto() {}
+	public NoticeDto() {}
 	
-	public QnaDto(int num, String writer, String title, String content, int viewCount, String regdate, int startRowNum,
+	public NoticeDto(int num, String writer, String title, String content, int viewCount, String regdate, int startRowNum,
 			int endRowNum, int prevNum, int nextNum) {
 		super();
 		this.num = num;

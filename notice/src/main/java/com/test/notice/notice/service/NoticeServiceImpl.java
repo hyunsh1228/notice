@@ -1,4 +1,4 @@
-package com.test.notice.qna.service;
+package com.test.notice.notice.service;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -12,14 +12,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.test.notice.exception.CanNotDeleteException;
-import com.test.notice.qna.dao.QnaDao;
-import com.test.notice.qna.dto.QnaDto;
+import com.test.notice.notice.dao.NoticeDao;
+import com.test.notice.notice.dto.NoticeDto;
 
 
 @Service
-public class QnaServiceImpl implements QnaService{
+public class NoticeServiceImpl implements NoticeService{
 	@Autowired
-	private QnaDao qnaDao;
+	private NoticeDao noticeDao;
 	
 	//한 페이지에 나타낼 row 의 갯수 
 	static final int PAGE_ROW_COUNT=5;
@@ -28,19 +28,12 @@ public class QnaServiceImpl implements QnaService{
 
 	@Override
 	public void getList(HttpServletRequest request) {
-		/*
-		 * 	request 에 검색 keyword 가 전달 될 수 도 있고 안될 수 도 있다.
-		 * 	- 전달이 안되는 경우 : navbar 에서 파일 목록보기를 누른경우
-		 * 	- 전달 되는 경우 1 : 하단에 검색어를 입력하고 검색 버튼을 누른경우
-		 * 	- 전달 되는 경우 2 : 이미지 검색을 안한 상태에서 하단 페이지 번호를 누른 경우 
-		 */
 		
-		//검색과 관련된 파라미터를 읽어와 본다.
 		String keyword=request.getParameter("keyword");
 		String condition=request.getParameter("condition");
 		
 		//검색 키워드가 존재한다면 키워드를 담을 CafeDto 객체 생성 
-		QnaDto dto=new QnaDto();
+		NoticeDto dto=new NoticeDto();
 		if(keyword != null) {//검색 키워드가 전달된 경우
 			if(condition.equals("titlecontent")) {//제목+내용 검색
 				dto.setTitle(keyword);
@@ -50,11 +43,7 @@ public class QnaServiceImpl implements QnaService{
 			}else if(condition.equals("writer")) {//작성자 검색
 				dto.setWriter(keyword);
 			}
-			/*
-			 *  검색 키워드에는 한글이 포함될 가능성이 있기 때문에
-			 *  링크에 그대로 출력가능하도록 하기 위해 미리 인코딩을 해서
-			 *  request 에 담아준다.
-			 */
+			
 			String encodedKeyword=null;
 			try {
 				encodedKeyword=URLEncoder.encode(keyword, "utf-8");
@@ -81,7 +70,7 @@ public class QnaServiceImpl implements QnaService{
 		int endRowNum=pageNum*PAGE_ROW_COUNT;
 		
 		//전체 row 의 갯수를 읽어온다.
-		int totalRow=qnaDao.getCount(dto);
+		int totalRow=noticeDao.getCount(dto);
 		//전체 페이지의 갯수 구하기
 		int totalPageCount=
 				(int)Math.ceil(totalRow/(double)PAGE_ROW_COUNT);
@@ -99,7 +88,7 @@ public class QnaServiceImpl implements QnaService{
 		dto.setEndRowNum(endRowNum);
 		
 		//1. DB 에서 글 목록을 얻어온다. (글목록을 얻어오는 DAO를 만든다.)
-		List<QnaDto> list=qnaDao.getList(dto);
+		List<NoticeDto> list=noticeDao.getList(dto);
 		//2. view page 에 필요한 값을 request 에 담아둔다.(forward 이동)
 		request.setAttribute("pageNum", pageNum);
 		request.setAttribute("startPageNum", startPageNum);
@@ -122,17 +111,17 @@ public class QnaServiceImpl implements QnaService{
 		//글 작성자
 		String writer=(String)request.getSession().getAttribute("id");//로그인을 해야지만 글을 쓸수 있으므로 세션에서 얻어온다 
 		//CafeDto 객체의 작성자, 제목, 내용을 담고
-		QnaDto dto=new QnaDto();
+		NoticeDto dto=new NoticeDto();
 		dto.setWriter(writer);
 		dto.setTitle(title);
 		dto.setContent(content);
 		//2. DB에 글 정보 저장하고
-		int isSuccess=qnaDao.insert(dto);
-		if(isSuccess!=0) {
-			request.setAttribute("isSuccess", true);
-		}else {
-			request.setAttribute("isSuccess", false);
-		}
+		noticeDao.insert(dto);
+//		if(isSuccess!=0) {
+//			request.setAttribute("isSuccess", true);
+//		}else {
+//			request.setAttribute("isSuccess", false);
+//		}
 	}
 
 	@Override
@@ -142,14 +131,14 @@ public class QnaServiceImpl implements QnaService{
 		//세션의 아이디와 글 작성자를 비교해서 같을 때만 삭제한다.
 		String id=(String)request.getSession().getAttribute("id");
 		//글작성자 (num을 전달해서 정보 얻어오고 dto로 작성자를 얻어온다.)
-		String writer=qnaDao.getData(num).getWriter();
+		String writer=noticeDao.getData(num).getWriter();
 		//아이디와 글 작성자가 같은지 여부
 		boolean isEqual=id.equals(writer);
 		if(!isEqual){
 			throw new CanNotDeleteException();
 		}
 		//2. DB 에서 삭제한다.
-		int isSuccess=qnaDao.delete(num);
+		int isSuccess=noticeDao.delete(num);
 		if(isSuccess!=0) {
 			request.setAttribute("isSuccess", true);
 		}else {
@@ -166,13 +155,13 @@ public class QnaServiceImpl implements QnaService{
 		String pageNum=request.getParameter("pageNum");
 		request.getSession().setAttribute("pageNum", pageNum);
 		
-		String title=qnaDao.getData(num).getTitle();
+		String title=noticeDao.getData(num).getTitle();
 		request.getSession().setAttribute("title", title);
 		//글작성자 (num을 전달해서 정보 얻어오고 dto로 작성자를 얻어온다.)
-		String writer=qnaDao.getData(num).getWriter();
+		String writer=noticeDao.getData(num).getWriter();
 		request.getSession().setAttribute("writer", writer);
 		
-		String content=qnaDao.getData(num).getContent();
+		String content=noticeDao.getData(num).getContent();
 		request.getSession().setAttribute("content", content);
 		
 		//세션의 아이디와 글 작성자를 비교해서 같을 때만 삭제한다.
@@ -191,7 +180,7 @@ public class QnaServiceImpl implements QnaService{
 			return;
 		}
 		//DB 에서 수정할 글 정보를 얻어온다.
-		QnaDto dto=qnaDao.getData(num);
+		NoticeDto dto=noticeDao.getData(num);
 		request.getSession().setAttribute("dto",dto);
 	}
 
@@ -204,11 +193,11 @@ public class QnaServiceImpl implements QnaService{
 		String pageNum=request.getParameter("pageNum");
 		request.getSession().setAttribute("pageNum", pageNum);
 		//2. DB 에 수정반영하고 //수정반영 하는 Dao 만들어야 함
-		QnaDto dto = new QnaDto();
+		NoticeDto dto = new NoticeDto();
 		dto.setNum(num);
 		dto.setTitle(title);
 		dto.setContent(content);
-		int isSuccess=qnaDao.update(dto);
+		int isSuccess=noticeDao.update(dto);
 		if(isSuccess!=0) {
 			request.setAttribute("isSuccess", true);
 		}else {
@@ -218,7 +207,7 @@ public class QnaServiceImpl implements QnaService{
 
 	@Override
 	public void addViewCount(HttpServletRequest request, int num) {
-		qnaDao.addViewCount(num);		
+		noticeDao.addViewCount(num);		
 	}
 	
 	@Override
@@ -231,7 +220,7 @@ public class QnaServiceImpl implements QnaService{
 		String condition=request.getParameter("condition");
 
 		//CafeDto 객체 생성 (select 할때 필요한 정보를 담기 위해)
-		QnaDto dto=new QnaDto();
+		NoticeDto dto=new NoticeDto();
 
 		if(keyword != null) {//검색 키워드가 전달된 경우
 			if(condition.equals("titlecontent")) {//제목+내용 검색
@@ -244,11 +233,7 @@ public class QnaServiceImpl implements QnaService{
 			}
 			//request 에 검색 조건과 키워드 담기
 			request.setAttribute("condition", condition);
-			/*
-			 *  검색 키워드에는 한글이 포함될 가능성이 있기 때문에
-			 *  링크에 그대로 출력가능하도록 하기 위해 미리 인코딩을 해서
-			 *  request 에 담아준다.
-			 */
+			
 			String encodedKeyword=null;
 			try {
 				encodedKeyword=URLEncoder.encode(keyword, "utf-8");
@@ -262,9 +247,9 @@ public class QnaServiceImpl implements QnaService{
 		//CafeDto 에 글번호도 담기
 		dto.setNum(num);
 		//조회수 1 증가 시키기
-		qnaDao.addViewCount(num);
+		noticeDao.addViewCount(num);
 		//글정보를 얻어와서
-		QnaDto dto2=qnaDao.getData(dto);
+		NoticeDto dto2=noticeDao.getData(dto);
 		//request 에 글정보를 담고 
 		request.setAttribute("dto", dto2);
 	}

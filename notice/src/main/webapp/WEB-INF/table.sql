@@ -1,4 +1,4 @@
-CREATE TABLE board_qna(
+CREATE TABLE board_notice(
 	num Number PRIMARY key,
 	Writer VARCHAR2(100) not null, -- 글 작성자의 id
 	title VARCHAR2(100) not null,

@@ -19,9 +19,9 @@
 			<ul class="nav navbar-nav">
 				<%-- 어디에 로딩 될지 모르니 절대 경로로 작성한다. --%>
 				<%-- <c:if test="${param.category eq 'cafe' }">class="active"</c:if> 아래에 작성하기 힘드므로 위에 작성하고 복사 붙여넣기 한다. --%>
-				<li <c:if test="${param.category eq 'cafe' }">class="active"</c:if>><a href="${pageContext.request.contextPath }/qna/list.do">Qna</a></li>
-				<li <c:if test="${param.category eq 'file' }">class="active"</c:if>><a href="${pageContext.request.contextPath }/notice/list.do">게시판</a></li>
-				<li <c:if test="${param.category eq 'shop' }">class="active"</c:if>><a href="${pageContext.request.contextPath }/review/list.do">review</a></li>
+				<li <c:if test="${param.category eq 'notice' }">class="active"</c:if>><a href="${pageContext.request.contextPath }/notice/list.do">공지사항</a></li>
+				<li <c:if test="${param.category eq 'qna' }">class="active"</c:if>><a href="${pageContext.request.contextPath }/qna/list.do">QnA</a></li>
+				<li <c:if test="${param.category eq 'review' }">class="active"</c:if>><a href="${pageContext.request.contextPath }/review/list.do">review</a></li>
 			</ul>
 			<c:choose>
 				<c:when test="${empty sessionScope.id }"> <%-- 아이디가 null 일 때(로그인 X) --%>

@@ -14,7 +14,7 @@
 <div class="container">
 	<h1>공지사항</h1>
 	<ul>
-		<li><a href="qna/list.do">공지사항 보기</a></li>
+		<li><a href="notice/list.do">공지사항 보기</a></li>
 	</ul>
 </div>
 </body>

@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="qna">
+<mapper namespace="notice">
 	<!-- 글 목록을 리턴하는 메소드 -->
-	<select id="getList" parameterType="qnaDto" resultType="qnaDto">
+	<select id="getList" parameterType="noticeDto" resultType="noticeDto">
 		SELECT * 													  <!-- 3. page select한다. -->
 		FROM
 			(SELECT result1.*, ROWNUM AS rnum 						  <!-- 2. ROWNUM 부여하고 -->
 			FROM
 				(SELECT num,writer,title,viewCount,To_CHAR(regdate, 'YY.MM.DD HH24:MI') AS regdate <!-- 1. board_file로 부터 정렬하고 -->
-				FROM board_qna
+				FROM board_notice
 				<choose> <!-- mybatis가 지원하는 동적쿼리 -->
 					<when test="title != null and content != null">
 						WHERE title LIKE '%'||#{title}||'%' OR content LIKE '%${content}%' <!-- 조건이 트루면 이것만 추가한다. false면 아래로 내려간다. -->
@@ -24,15 +24,15 @@
 		WHERE rnum BETWEEN #{startRowNum} AND #{endRowNum} <!-- 파라미터에서 startRowNum, endRowNum 을 가져온다. -->
 	</select>
 	<!-- 새글을 저장하는 메소드 -->
-	<insert id="insert" parameterType="qnaDto">
-		INSERT INTO board_qna
+	<insert id="insert" parameterType="noticeDto">
+		INSERT INTO board_notice
 		(num,writer,title,content,viewCount,regdate)
-		VALUES(board_qna_seq.nextval,#{writer},#{title},#{content},#{viewCount},sysdate)
+		VALUES(#{writer},#{title},#{content},#{viewCount},sysdate)
 	</insert>
 	<!-- 글 전체의 갯수를 리턴하는 메소드 -->
 	<select id="getCount" resultType="int">
 		SELECT NVL(MAX(ROWNUM), 0) <!-- NVL를 안적어주면 resultType이 int인데 ROWNUM에 null이 들어가므로 Exception 이 발생한다 -->
-		FROM board_qna
+		FROM board_notice
 			<choose> <!-- mybatis가 지원하는 동적쿼리 -->
 				<when test="title != null and content != null">
 					WHERE title LIKE '%'||#{title}||'%' OR content LIKE '%${content}%' <!-- 조건이 트루면 이것만 추가한다. false면 아래로 내려간다. -->
@@ -46,15 +46,15 @@
 			</choose>
 	</select>
 	<!-- 글 정보 얻어오기  -->
-	<select id="getData" parameterType="qnaDto"
-		resultType="qnaDto">
+	<select id="getData" parameterType="noticeDto"
+		resultType="noticeDto">
 		SELECT result1.*
 		FROM
 			(SELECT num, writer, title, content, viewCount, 
 			TO_CHAR(regdate, 'YY.MM.DD HH24:MI') AS regdate,
 			LAG(num, 1, 0) OVER(ORDER BY num DESC) AS prevNum,
 			LEAD(num, 1, 0) OVER(ORDER BY num DESC) AS nextNum
-			FROM board_qna
+			FROM board_notice
 			<choose>
 				<when test="title != null and content != null">
 					WHERE title LIKE '%'||#{title}||'%' OR
@@ -72,32 +72,32 @@
 	</select>
 	<!-- num 인자를 전달 했을 때 글 하나의 정보를 리턴하는 메소드 -->
 	<select id="getData2" parameterType="int"
-		resultType="qnaDto">
+		resultType="noticeDto">
 		SELECT result1.*
 		FROM
 			(SELECT num, writer, title, content, viewCount, 
 			TO_CHAR(regdate, 'YY.MM.DD HH24:MI') AS regdate,
 			LAG(num, 1, 0) OVER(ORDER BY num DESC) AS prevNum,
 			LEAD(num, 1, 0) OVER(ORDER BY num DESC) AS nextNum
-			FROM board_qna
+			FROM board_notice
 			ORDER BY num DESC) result1
 		WHERE num=#{num }
 	</select>
 	<!-- 글 조회수 1 증가 시키는 메소드 -->
 	<update id="addViewCount" parameterType="int">
-		update board_qna
+		update board_notice
 		Set viewCount=viewCount+1
 		Where Num=#{num}
 	</update>
 	<!-- 글 정보를 수정하는 메소드 -->
-	<update id="update" parameterType="qnaDto">
-		UPDATE board_qna
+	<update id="update" parameterType="noticeDto">
+		UPDATE board_notice
 		SET content=#{content}, title=#{title}
 		WHERE num=#{num}
 	</update>
 	<!-- 글 정보를 삭제하는 메소드 -->
 	<delete id="delete" parameterType="int">
-		DELETE FROM board_qna
+		DELETE FROM board_notice
 		WHERE num=#{num}
 	</delete>
 </mapper>

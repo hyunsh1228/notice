@@ -9,12 +9,12 @@
 </head>
 <body>
 <jsp:include page="../include/navbar.jsp">
-	<jsp:param value="qna" name="category"/>
+	<jsp:param value="notice" name="category"/>
 </jsp:include>
 <!-- 3. 글 수정 폼을 응답한다. -->
 <div class="container">
 	<ol class="breadcrumb">
-		<li><a href="${pageContext.request.contextPath }/qna/list.do">목록</a></li>
+		<li><a href="${pageContext.request.contextPath }/notice/list.do">목록</a></li>
 		<li>글 수정 양식</li>
 	</ol>	
 	<form action="update.do" method="post">
@@ -41,7 +41,7 @@
 		</div>
 		<input type="hidden" name="pageNum" value="${pageNum }" />
 		<button class="btn btn-primary" type="submit" onclick="submitContents(this);">수정확인</button>
-		<a class="btn btn-warning" href="${pageContext.request.contextPath }/qna/list.do">취소</a>
+		<a class="btn btn-warning" href="${pageContext.request.contextPath }/notice/list.do">취소</a>
 	</form>
 </div>
 <!-- 스마트 에디터 붙여넣기 할 공간 -->

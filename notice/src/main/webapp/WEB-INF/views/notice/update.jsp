@@ -15,14 +15,14 @@
 		<c:when test="${isSuccess}">
 			<script>
 				alert("글이 수정되었습니다.")
-				location.href="${pageContext.request.contextPath }/qna/detail.do?num=${num}&pageNum=${pageNum}";
+				location.href="${pageContext.request.contextPath }/notice/detail.do?num=${num}&pageNum=${pageNum}";
 			</script>
 		</c:when>
 		<c:otherwise>
 			<h1>Alert</h1>
 			<p class="alert alert-danger">
 				글 수정 실패!
-				<a class="alert-link" href="${pageContext.request.contextPath }/qna/updateform.do?num=${num}">다시시도</a>
+				<a class="alert-link" href="${pageContext.request.contextPath }/notice/updateform.do?num=${num}">다시시도</a>
 			</p>
 		</c:otherwise>
 	</c:choose>

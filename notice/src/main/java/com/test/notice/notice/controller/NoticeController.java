@@ -1,4 +1,4 @@
-package com.test.notice.qna.controller;
+package com.test.notice.notice.controller;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -8,64 +8,60 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.test.notice.qna.service.QnaService;
+import com.test.notice.notice.service.NoticeService;
 
 @Controller
-public class QnaController {
+public class NoticeController {
 	@Autowired
-	private QnaService service;
+	private NoticeService service;
 	//글목록 요청처리
-	@RequestMapping("/qna/list")
+	@RequestMapping("/notice/list")
 	public ModelAndView list(ModelAndView mView, HttpServletRequest request) {
-		// HttpServletRequest 객체를 서비스에 넘겨 주면서
-		// 비즈니스 로직을 수행하고 
-		service.getList(request); //HttpServletRequest 객체는 요청한 클라이언트의 정보를 확인할수 있는기능이 들어 있다.
-		// view page 로 forward 이동해서 글 목록 출력하기 
-		mView.setViewName("qna/list");
+		service.getList(request); 
+		mView.setViewName("notice/list");
 		return mView;
 	}
 	
-	@RequestMapping("/qna/insertform")
+	@RequestMapping("/notice/insertform")
 	public ModelAndView authInsertform(ModelAndView mView, HttpServletRequest request) {  
 		//로그인 된 회원의 아이디 읽어오기
 		String id=(String)request.getSession().getAttribute("id");
 		mView.addObject("id", id);
-		mView.setViewName("qna/insertform");
+		mView.setViewName("notice/insertform");
 		return mView;
 	}
 	
-	@RequestMapping("/qna/insert")
-	public ModelAndView authInsert(ModelAndView mView, HttpServletRequest request) {
+	@RequestMapping("/notice/insert")
+	public ModelAndView Insert(ModelAndView mView, HttpServletRequest request) {
 		service.insert(request);
-		mView.setViewName("qna/insert");
+		mView.setViewName("notice/insert");
 		return mView;
 	}
-	
+		
 	//글 자세히 보기 요청 처리
-	@RequestMapping("/qna/detail")
+	@RequestMapping("/notice/detail")
 	public String detail(HttpServletRequest request){
 		service.getDetail(request);
-		//view page 로 forward 이동해서 글 자세히 보기 
-		return "qna/detail";
+		return "notice/detail";
 	}
 	
-	@RequestMapping("/qna/delete")
+	@RequestMapping("/notice/delete")
 	public ModelAndView delete(ModelAndView mView, HttpServletRequest request, HttpServletResponse response) {
 		service.delete(request, response);
-		mView.setViewName("qna/delete");
+		mView.setViewName("notice/delete");
 		return mView;
 	}
 	
-	@RequestMapping("/qna/updateform")
+	@RequestMapping("/notice/updateform")
 	public ModelAndView updateform(ModelAndView mView, HttpServletRequest request, HttpServletResponse response) {
 		service.updateform(request, response);
-		mView.setViewName("qna/updateform");
+		mView.setViewName("notice/updateform");
 		return mView;
 	}
-	@RequestMapping("/qna/update")
+	@RequestMapping("/notice/update")
 	public ModelAndView update(ModelAndView mView, HttpServletRequest request) {
 		service.update(request);
-		mView.setViewName("qna/update");
+		mView.setViewName("notice/update");
 		return mView;
 	}
 	
