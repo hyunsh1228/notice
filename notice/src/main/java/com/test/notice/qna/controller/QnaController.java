@@ -1,5 +1,8 @@
 package com.test.notice.qna.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,8 +11,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.test.notice.qna.dto.QnaCommentDto;
 import com.test.notice.qna.dto.QnaDto;
 import com.test.notice.qna.service.QnaService;
 
@@ -98,10 +103,30 @@ public class QnaController {
 	//댓글 저장 요청 처리
 	@RequestMapping(value = "/qna/comment_insert", 
 			method = RequestMethod.POST)
-	public ModelAndView authCommentInsert(HttpServletRequest request) 
-	{
+	public ModelAndView authCommentInsert(HttpServletRequest request,
+			@RequestParam int ref_group) {
 		service.saveComment(request);
-		return new ModelAndView("redirect:/qna/detail.do?num=");
+		return new ModelAndView("redirect:/qna/detail.do?num="+ref_group);
 	}
-
+	
+	//댓글 삭제 요청 처리
+	@ResponseBody
+	@RequestMapping(value = "/qna/comment_delete", method = RequestMethod.POST)
+	public Map<String, Object> authCommentDelete(HttpServletRequest request,
+			@RequestParam int num){
+		service.deleteComment(num);
+		Map<String, Object> map=new HashMap<>();
+		map.put("isSuccess", true);
+		return map; // {"isSuccess":true} 형식의 JSON 문자열이 응답된다.
+	}
+	//댓글 수정 요청 처리(ajax)
+	@ResponseBody
+	@RequestMapping("/qna/comment_update")
+	public Map<String, Object> authCommentUpdate(HttpServletRequest request,
+			@ModelAttribute QnaCommentDto dto){
+		service.updateComment(dto);
+		Map<String, Object> map=new HashMap<>();
+		map.put("isSuccess", true);
+		return map;
+	}
 }

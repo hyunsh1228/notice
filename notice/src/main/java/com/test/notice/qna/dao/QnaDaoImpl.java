@@ -26,7 +26,7 @@ public class QnaDaoImpl implements QnaDao{
 
 	@Override
 	public void insert(QnaDto dto) {
-		session.selectList("qna.getList", dto);
+		session.insert("qna.insert", dto);
 		
 	}
 
